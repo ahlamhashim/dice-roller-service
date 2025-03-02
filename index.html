@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dice Roller</title>
+</head>
+<body>
+    <h1>Dice Roller</h1>
+    <button id="wakeUpButton">Wake Up Server</button>
+    <button id="rollDiceButton">Roll Dice</button>
+    <p id="result"></p>
+
+    <script>
+        const wakeUpButton = document.getElementById('wakeUpButton');
+        const rollDiceButton = document.getElementById('rollDiceButton');
+        const resultElement = document.getElementById('result');
+
+        // Wake up the server
+        wakeUpButton.addEventListener('click', async () => {
+            try {
+                const response = await fetch('/api/wake-up');
+                const data = await response.json();
+                resultElement.textContent = data.message;
+            } catch (error) {
+                resultElement.textContent = 'Error waking up server';
+            }
+        });
+
+        // Roll the dice
+        rollDiceButton.addEventListener('click', async () => {
+            try {
+                const response = await fetch('/api/roll-dice?sides=6');
+                const data = await response.json();
+                resultElement.textContent = `You rolled a ${data.result} on a ${data.sides}-sided dice.`;
+            } catch (error) {
+                resultElement.textContent = 'CORS failure or server error';
+            }
+        });
+    </script>
+</body>
+</html>
